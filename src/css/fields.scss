@@ -1,0 +1,75 @@
+.field__input {
+  & input {
+    border: 2px solid #000;
+    height: 25px;
+    width: 340px;
+  }
+
+  & input:focus {
+    border: 2px solid green;
+  }
+}
+
+.error {
+  color: red;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.field__body {
+  &:first-child {
+    padding: 100px 0 0 0;
+  }
+
+  padding: 20px 0 0 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  & label {
+    display: block;
+    text-transform: uppercase;
+    margin: 0 0 5px 0;
+    font-weight: 700;
+  }
+
+  & button {
+    padding: 10px 25px;
+    color: blue;
+    background: black;
+    transition: all 1s linear 0s;
+  }
+
+  & button:hover {
+    color: black;
+    background: blue;
+  }
+
+}
+
+.field__textarea {
+  & textarea {
+    width: 340px;
+    border: 2px solid #000;
+  }
+
+  & textarea:focus {
+    border: 2px solid green;
+  }
+}
+
+.field__select {
+  & select {
+    width: 340px;
+    border: 2px solid #000;
+  }
+
+  & select:focus {
+    border: 2px solid green;
+  }
+
+}
+
+
