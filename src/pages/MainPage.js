@@ -3,7 +3,8 @@ import * as Yup from 'yup'
 import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
 import {useDispatch, useSelector} from "react-redux";
-import {addTask, removeTask} from "../reducer/actions";
+import {addTask, changeStatus, removeTask} from "../reducer/actions";
+import {toastMessage} from "../components/toastyfiMessages";
 
 export const MainPage = () => {
 
@@ -23,10 +24,6 @@ export const MainPage = () => {
     const onSubmit = () => {
     }
 
-    const onChangeHandler = (event) => {
-        setValue(event.target.value)
-    }
-
     const onKeyPressHandler = (event) => {
         if (event.key === 'Enter') {
             const task = {
@@ -37,11 +34,14 @@ export const MainPage = () => {
             if (value.length > 3) {
                 dispatch(addTask(task))
             }
-
+            toastMessage('Task created', 'success')
             setValue('')
         }
     }
 
+    const onChangeHandler = (event) => {
+        setValue(event.target.value)
+    }
 
     return (
         <>
@@ -68,15 +68,23 @@ export const MainPage = () => {
                     }
                 </Formik>
                 <div className="container">
-                    <ul>
+                    <ul className='content__list'>
                         {
                             list.map(element => <li key={element.id}>
-                                <div>{element.name}</div>
-                                <div className="content__btns"><input type="checkbox"
-                                                                      defaultChecked={element.status}/>
+                                <div
+                                    className={`${element.status ? 'line-through' : null}`}>{element.name}</div>
+                                <div className="content__btns">
+                                    <input
+                                        type="checkbox"
+                                        onClick={() =>
+                                            dispatch(changeStatus(element))
+                                        }
+                                        disabled={element.status}
+                                        defaultChecked={element.status}
+                                    />
                                     <div className="content__delete"
                                          onClick={() => {
-                                             console.log(element.name);
+                                             toastMessage('Task Delete', 'success')
                                              dispatch(removeTask(element.name))
                                          }}>&times;</div>
                                 </div>

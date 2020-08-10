@@ -2,8 +2,12 @@ import React from 'react'
 import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
 import * as Yup from 'yup'
+import {useDispatch} from "react-redux";
+import {addMessageFromContactForm} from "../reducer/actions";
 
 export const ContactsPage = () => {
+
+    const dispatch = useDispatch();
 
     const selectOptions = [
         {id: 0, value: ''},
@@ -20,8 +24,10 @@ export const ContactsPage = () => {
     }
 
     const onSubmit = (value, onSubmitProps) => {
+        console.log(value);
         onSubmitProps.setSubmitting(false)
         onSubmitProps.resetForm()
+        dispatch(addMessageFromContactForm(value))
     }
 
     const validationSchema = Yup.object({
@@ -63,12 +69,12 @@ export const ContactsPage = () => {
                                     label='Select Option'
                                 />
                                 <div className='field__body'>
-                                        <button
-                                            disabled={!formik.isValid}
-                                            type={'submit'}
-                                        >
-                                            Submit
-                                        </button>
+                                    <button
+                                        disabled={!formik.isValid}
+                                        type={'submit'}
+                                    >
+                                        Submit
+                                    </button>
                                 </div>
                             </Form>
 

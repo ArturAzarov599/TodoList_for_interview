@@ -13,8 +13,7 @@ export const App = () => {
                 <Switch>
                     <Route exact path={'/'}><MainPage/></Route>
                     <Route exact path={'/contacts'}><ContactsPage/></Route>
-                    <Route exact={'/register'}><RegisterLoginPage/></Route>
-                    <Route exact path={'/exit'}/>
+                    <Route exact path={'/register'}><RegisterLoginPage/></Route>
                 </Switch>
             </BrowserRouter>
         </div>
