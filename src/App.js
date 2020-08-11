@@ -1,22 +1,24 @@
 import React from 'react';
 import {NavigationBar} from './pages/NavigationBar.js';
-import {BrowserRouter, Switch, Route} from 'react-router-dom'
-import {MainPage} from "./pages/MainPage";
-import {ContactsPage} from "./pages/ContactsPage";
-import {RegisterLoginPage} from "./pages/RegisterLoginPage";
+import {BrowserRouter} from 'react-router-dom'
+import {AuthContext} from "./context/AuthContext";
+import {useAuthorization} from "./myHooks/useAuthozication";
+import {RoutesBar} from "./components/RoutesBar";
 
 export const App = () => {
+
+    const {login, logout, email, ready, token} = useAuthorization()
+    const isAuth = true
+
     return (
-        <div className="App">
-            <BrowserRouter>
-                <NavigationBar/>
-                <Switch>
-                    <Route exact path={'/'}><MainPage/></Route>
-                    <Route exact path={'/contacts'}><ContactsPage/></Route>
-                    <Route exact path={'/register'}><RegisterLoginPage/></Route>
-                </Switch>
-            </BrowserRouter>
-        </div>
+        <AuthContext.Provider value={{login, logout, email, ready, token}}>
+            <div className="App">
+                <BrowserRouter>
+                    {isAuth && <NavigationBar/>}
+                    <RoutesBar isAuth={isAuth}/>
+                </BrowserRouter>
+            </div>
+        </AuthContext.Provider>
     );
 }
 

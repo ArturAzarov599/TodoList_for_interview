@@ -2,57 +2,39 @@ import React, {useState} from "react";
 import * as Yup from 'yup'
 import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
-import {LoginPage} from "./LoginPage";
-import {Route, Switch, Redirect} from "react-router-dom";
+import {Redirect, Route, Switch} from "react-router-dom";
+import {RegisterLoginPage} from "./RegisterLoginPage";
 
-export const RegisterLoginPage = () => {
+export const LoginPage = () => {
 
-    const [haveAccount, setHaveAccount] = useState(false)
+    const [haveAccount, setHaveAccount] = useState(true)
 
     const initialValues = {
-        name: '',
-        surname: '',
-        age: '',
-        photo: '', // soon
         email: '',
         password: '',
         confirmPassword: '',
-        sex: '',
-        company: ''
     }
 
-    const onSubmit = (values) => console.log('This is your data:', values)
+    const onSubmit = () => {
+    }
 
     const validationSchema = Yup.object({
-        name: Yup.string().required('Required'),
-        surname: Yup.string().required('Required'),
-        age: Yup.string().required('Required'),
         email: Yup.string().email('Input valid email').required('Required'),
         password: Yup.string().required('Required'),
         confirmPassword: Yup.string().oneOf([Yup.ref('password'), ''], 'Password*s must match').required('Require'),
-        sex: Yup.string().required('Choose your sex'),
-        company: Yup.string().required('Input your company'),
-
     })
 
-    const typeOfSex = [
-        {id: 0, value: ''},
-        {id: 1, value: 'Man'},
-        {id: 2, value: 'Woman'},
-        {id: 3, value: 'Other'},
-    ]
 
-    if (haveAccount) {
+    if (!haveAccount) {
         return (
             <Switch>
                 <Route exact path={''}>
-                    <LoginPage/>
+                    <RegisterLoginPage/>
                     <Redirect to=''/>
                 </Route>
             </Switch>
         )
     } else {
-
         return (
             <React.Fragment>
                 <Formik
@@ -63,23 +45,6 @@ export const RegisterLoginPage = () => {
                     {
                         formik => {
                             return <Form>
-                                <FormikControl
-                                    control='input'
-                                    label='Name:'
-                                    name='name'
-                                />
-
-                                <FormikControl
-                                    control='input'
-                                    label='Surname:'
-                                    name='name'
-                                />
-
-                                <FormikControl
-                                    control='input'
-                                    label='Age:'
-                                    name='age'
-                                />
 
                                 <FormikControl
                                     control='input'
@@ -102,19 +67,6 @@ export const RegisterLoginPage = () => {
                                     name='confirmPassword'
                                 />
 
-                                <FormikControl
-                                    control='select'
-                                    label='Choose your Sex:'
-                                    name='sex'
-                                    option={typeOfSex}
-                                />
-
-                                <FormikControl
-                                    control='input'
-                                    label='Company:'
-                                    name='company'
-                                />
-
                                 <div className='field__body'>
                                     <button
                                         disabled={!formik.isValid}
@@ -126,12 +78,16 @@ export const RegisterLoginPage = () => {
 
                                 <div className='field__body'>
                                     <button
-                                        onClick={() => setHaveAccount(true)}
+                                        onClick={() => setHaveAccount(false)}
                                         type={'submit'}
                                     >
-                                        Have an account?
+                                        Don't have an account?
                                     </button>
                                 </div>
+
+                                <Redirect>
+
+                                </Redirect>
 
                             </Form>
                         }

@@ -157,8 +157,8 @@ $nine__px: 9px;
       margin: 0 0 30px 0;
     }
   }
-  .content__text {
-    padding: 50px 0 0 0;
+  .content {
+    padding: 0 10px 0 10px;
   }
 }
 
@@ -196,6 +196,15 @@ body {
     transition: all 1s linear 0s;
     top: 9px;
   }
+
+
+    &__btns{
+      margin:0 15px 0 0;
+    }
+
+    &__btns &__delete{
+      margin:0 0 0 10px;
+    }
 
   & span:hover {
     color: indigo;

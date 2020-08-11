@@ -21,6 +21,7 @@
     padding: 100px 0 0 0;
   }
 
+
   padding: 20px 0 0 0;
 
   display: flex;
@@ -72,7 +73,27 @@
 
 }
 
-
-.toast__margin{
+.toast__margin {
   margin: 100px 0 0 0;
+}
+
+@media (max-width: 767px) {
+  .field__body {
+    &:first-child {
+      padding: 50px 0 0 0;
+    }
+  }
+
+  .toast__margin {
+    &:first-child{
+      margin: 70px 0 0 10px;
+    }
+
+    margin: 10px 0 0 10px;
+    width: 50%;
+  }
+}
+
+.contact__page{
+  padding: 80px 0 0 0;
 }

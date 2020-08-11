@@ -23,16 +23,17 @@ export const NavigationBar = () => {
                         <div onClick={() => {
                             dispatch(addClass(value))
                         }} className={`header__burger ${value ? "active" : 'null'}`}>
-                            <span>some text</span>
+                            <span> </span>
                         </div>
 
                         <nav className={`header__menu ${value ? "active" : 'null'} `}>
                             <ul className="header__list">
                                 <li><NavLink exact to="/" className="header__link">Home</NavLink></li>
-                                <li><a href='/' className="header__link popup__link">About</a></li>
-                                <li><NavLink exact to='/contacts' className="header__link">Contacts</NavLink></li>
-                                <li><NavLink exact to='/register' className="header__link">Register/Enter</NavLink></li>
-                                <li><NavLink exact to="/exit" className="header__link">Exit</NavLink></li>
+                                <li><a href='#popup' className="header__link popup__link">About</a></li>
+                                <li><NavLink exact to='contacts' className="header__link">Contacts</NavLink></li>
+                                {/*<li><NavLink exact to='register' className="header__link">Register/Enter</NavLink></li>*/}
+                                <li><NavLink exact to="exit" className="header__link">Exit</NavLink>
+                                </li>
                             </ul>
                         </nav>
                     </div>
@@ -43,7 +44,7 @@ export const NavigationBar = () => {
             <div id='popup' className="popup">
                 <div className="popup__body">
                     <div className="popup__content">
-                        <a href="/" className="popup__close">X</a>
+                        <a href="#popou" className="popup__close">X</a>
                         <div className="popup__text">
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci dignissimos dolores
