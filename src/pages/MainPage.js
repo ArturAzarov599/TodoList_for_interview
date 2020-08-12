@@ -1,15 +1,18 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import * as Yup from 'yup'
 import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
 import {useDispatch, useSelector} from "react-redux";
 import {addTask, changeStatus, removeTask} from "../reducer/actions";
 import {toastMessage} from "../components/toastyfiMessages";
+import {useHttp} from "../myHooks/useHttp";
+import {AuthContext} from "../context/AuthContext";
 
 export const MainPage = () => {
 
+    const {email} = useContext(AuthContext)
     const [value, setValue] = useState('')
-
+    const {request} = useHttp()
     const list = useSelector((state) => state.taskList.taskList)
     const dispatch = useDispatch()
 
@@ -21,26 +24,66 @@ export const MainPage = () => {
         taskName: Yup.string().required('')
     })
 
+    useEffect(() => {
+        async function getTasks() {
+
+            const allTasks = await request("api/task/get")
+            console.log(allTasks);
+            dispatch(addTask(allTasks))
+
+        }
+
+        getTasks()
+
+    }, [dispatch, request])
+
     const onSubmit = () => {
     }
 
-    const onKeyPressHandler = (event) => {
+    const deleteHandler = async (data) => {
+        await fetch("api/task/delete",
+            {
+                method: "POST",
+                body: JSON.stringify({_id: data._id}),
+                headers: {'Content-Type': 'application/json'}
+            })
+    }
+
+    const onKeyPressHandler = async (event) => {
         if (event.key === 'Enter') {
             const task = {
                 name: value,
-                id: list.length,
-                status: false
             }
             if (value.length > 3) {
-                dispatch(addTask(task))
+                const response = await request("api/task/add", "POST", {...task, email})
+                dispatch(addTask({...response}))
+                toastMessage(response.message || 'Завдання створено', 'success')
+                setValue('')
+            } else {
+                toastMessage('Завдання має замало символів', 'warning')
+                setValue('')
             }
-            toastMessage('Task created', 'success')
-            setValue('')
         }
     }
 
     const onChangeHandler = (event) => {
         setValue(event.target.value)
+    }
+
+    const changeFlag = async (data) => {
+        console.log(data);
+        try {
+            await fetch('api/task/change', {
+                method: "POST",
+                body: JSON.stringify({...data}),
+                headers: {'Content-type': 'application/json'}
+            })
+            dispatch(changeStatus(data))
+            toastMessage('Завдання виконано', 'dark')
+        } catch (e) {
+            toastMessage(e.message || 'Щось пішло не так!', 'warning')
+        }
+
     }
 
     return (
@@ -70,15 +113,13 @@ export const MainPage = () => {
                 <div className="container">
                     <ul className='content__list'>
                         {
-                            list.map(element => <li key={element.id}>
+                            list.map(element => <li key={element._id}>
                                 <div
                                     className={`${element.status ? 'line-through' : null}`}>{element.name}</div>
                                 <div className="content__btns">
                                     <input
                                         type="checkbox"
-                                        onClick={() =>
-                                            dispatch(changeStatus(element))
-                                        }
+                                        onClick={() => changeFlag(element)}
                                         disabled={element.status}
                                         defaultChecked={element.status}
                                     />
@@ -86,6 +127,7 @@ export const MainPage = () => {
                                          onClick={() => {
                                              toastMessage('Task Delete', 'success')
                                              dispatch(removeTask(element.name))
+                                             deleteHandler(element)
                                          }}>&times;</div>
                                 </div>
                             </li>)

@@ -1,36 +1,40 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import * as Yup from 'yup'
 import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
 import {Redirect, Route, Switch} from "react-router-dom";
 import {RegisterLoginPage} from "./RegisterLoginPage";
+import {useHttp} from "../myHooks/useHttp";
+import {AuthContext} from "../context/AuthContext";
 
 export const LoginPage = () => {
 
+    const {request} = useHttp()
     const [haveAccount, setHaveAccount] = useState(true)
+    const auth = useContext(AuthContext)
 
     const initialValues = {
         email: '',
         password: '',
-        confirmPassword: '',
     }
 
-    const onSubmit = () => {
+    const onSubmit = async (values) => {
+        const response = await request('/api/user/enter', "POST", {...values})
+        auth.login(response.token, response.email, response.userId)
     }
 
     const validationSchema = Yup.object({
         email: Yup.string().email('Input valid email').required('Required'),
         password: Yup.string().required('Required'),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password'), ''], 'Password*s must match').required('Require'),
     })
 
 
     if (!haveAccount) {
         return (
             <Switch>
-                <Route exact path={''}>
+                <Route exact path={'/contacts'}>
                     <RegisterLoginPage/>
-                    <Redirect to=''/>
+                    <Redirect to='/contacts'/>
                 </Route>
             </Switch>
         )
@@ -60,13 +64,6 @@ export const LoginPage = () => {
                                     name='password'
                                 />
 
-                                <FormikControl
-                                    control='input'
-                                    label='Confirm Password:'
-                                    type='password'
-                                    name='confirmPassword'
-                                />
-
                                 <div className='field__body'>
                                     <button
                                         disabled={!formik.isValid}
@@ -79,15 +76,10 @@ export const LoginPage = () => {
                                 <div className='field__body'>
                                     <button
                                         onClick={() => setHaveAccount(false)}
-                                        type={'submit'}
                                     >
                                         Don't have an account?
                                     </button>
                                 </div>
-
-                                <Redirect>
-
-                                </Redirect>
 
                             </Form>
                         }

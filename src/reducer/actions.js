@@ -1,6 +1,5 @@
 import {ADD_CLASS, ADD_MESSAGE_FORM_CONTACT, ADD_TASK, CHANGE__STATUS, REMOVE_TASK} from './types'
 
-
 export const addClass = (data) => {
     return {
         type: ADD_CLASS,

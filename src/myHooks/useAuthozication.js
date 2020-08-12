@@ -2,27 +2,20 @@ import {useCallback, useEffect, useState} from "react";
 
 export const useAuthorization = () => {
 
-    const storageName = 'Authorization data!'
+    const storageName = 'Authorization'
     const [token, setToken] = useState(null)
-    const [ready, setReady] = useState(false)
     const [email, setEmail] = useState(null)
-    const [nameSurname, setNameSurName] = useState({
-        name: null,
-        surname: null
-    })
+    const [userId, setUserId] = useState(null)
 
-    const login = useCallback((jwtToken, email, name, surname) => {
+    const login = useCallback((jwtToken, id, email) => {
         setToken(jwtToken)
+        setUserId(id)
         setEmail(email)
-        setNameSurName(prevState => prevState({
-            name: name,
-            surname: surname
-        }))
 
         localStorage.setItem(storageName, JSON.stringify({
             token: jwtToken,
+            userId: id,
             email: email,
-            nameSurname: nameSurname
         }))
 
     }, [])
@@ -30,21 +23,26 @@ export const useAuthorization = () => {
     const logout = useCallback(() => {
         localStorage.removeItem(storageName)
         setToken(null)
-        setReady(null)
+        setUserId(null)
         setEmail(null)
-        setNameSurName(prevState => prevState({
-            name: null,
-            surname: null
-        }))
     }, [])
 
     useEffect(() => {
-        const data = JSON.parse(localStorage.getItem(storageName))
-        if (data && data.token && data.email && data.nameSurname) {
-            login(data.token, data.email, data.nameSurname)
-        }
-    }, [])
 
-    return {login, logout, ready, email, token}
+        const data = JSON.parse(localStorage.getItem(storageName))
+
+        if (data && data.token && data.email) {
+            login(data.token, data.userId, data.email)
+        }
+
+    }, [login])
+
+    return {
+        login,
+        logout,
+        email,
+        userId,
+        token
+    }
 
 }

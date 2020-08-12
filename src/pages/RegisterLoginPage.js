@@ -4,16 +4,18 @@ import {Form, Formik} from "formik";
 import {FormikControl} from "../formikValidation/FormikControl";
 import {LoginPage} from "./LoginPage";
 import {Route, Switch, Redirect} from "react-router-dom";
+import {useHttp} from "../myHooks/useHttp";
+import {toastMessage} from "../components/toastyfiMessages";
 
 export const RegisterLoginPage = () => {
 
     const [haveAccount, setHaveAccount] = useState(false)
+    const {request} = useHttp()
 
     const initialValues = {
         name: '',
         surname: '',
         age: '',
-        photo: '', // soon
         email: '',
         password: '',
         confirmPassword: '',
@@ -21,7 +23,19 @@ export const RegisterLoginPage = () => {
         company: ''
     }
 
-    const onSubmit = (values) => console.log('This is your data:', values)
+
+    const onSubmit = async (values) => {
+        try {
+            await request('/api/auth/register', "POST", {...values})
+
+            setHaveAccount(true)
+            toastMessage('Користувач успішно створений', 'dark')
+
+        } catch (e) {
+            toastMessage(e.message || 'Hello There!', 'warning')
+        }
+
+    }
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Required'),
@@ -32,7 +46,6 @@ export const RegisterLoginPage = () => {
         confirmPassword: Yup.string().oneOf([Yup.ref('password'), ''], 'Password*s must match').required('Require'),
         sex: Yup.string().required('Choose your sex'),
         company: Yup.string().required('Input your company'),
-
     })
 
     const typeOfSex = [
@@ -45,9 +58,9 @@ export const RegisterLoginPage = () => {
     if (haveAccount) {
         return (
             <Switch>
-                <Route exact path={''}>
+                <Route exact path={'/contacts'}>
                     <LoginPage/>
-                    <Redirect to=''/>
+                    <Redirect to='/contacts'/>
                 </Route>
             </Switch>
         )
@@ -72,7 +85,7 @@ export const RegisterLoginPage = () => {
                                 <FormikControl
                                     control='input'
                                     label='Surname:'
-                                    name='name'
+                                    name='surname'
                                 />
 
                                 <FormikControl
@@ -117,6 +130,7 @@ export const RegisterLoginPage = () => {
 
                                 <div className='field__body'>
                                     <button
+                                        // onClick={registerHandler}
                                         disabled={!formik.isValid}
                                         type={'submit'}
                                     >
@@ -127,7 +141,6 @@ export const RegisterLoginPage = () => {
                                 <div className='field__body'>
                                     <button
                                         onClick={() => setHaveAccount(true)}
-                                        type={'submit'}
                                     >
                                         Have an account?
                                     </button>

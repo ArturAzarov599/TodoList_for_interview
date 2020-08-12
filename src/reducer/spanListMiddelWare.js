@@ -1,4 +1,5 @@
 import {ADD_TASK} from "./types";
+import {toastMessage} from "../components/toastyfiMessages";
 
 const spanList = ['fuck', 'xyz', 'Hello There!']
 
@@ -8,7 +9,8 @@ export const spanListMiddleWare = () => {
             if (action.type === ADD_TASK) {
                 const listOfSpan = spanList.filter(word => word.includes(action.payload.name))
                 if (listOfSpan.length > 0) {
-                    return alert('You are spammer!')
+                    toastMessage('You are spammer!', 'info')
+                    return
                 }
             }
             return next(action)

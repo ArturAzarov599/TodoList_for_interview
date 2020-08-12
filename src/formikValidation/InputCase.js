@@ -10,7 +10,7 @@ export const Input = (props) => {
             <div className='field__input'>
                 <div className="container">
                     <label htmlFor={name}>{label}</label>
-                    <Field id={name} name={name} {...rest} />
+                    <Field id={name} name={name} {...rest} autoComplete="on" />
                     <ErrorMessage name={name} component={TextError}/>
                 </div>
             </div>

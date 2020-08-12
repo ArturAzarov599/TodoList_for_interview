@@ -7,11 +7,11 @@ import {RoutesBar} from "./components/RoutesBar";
 
 export const App = () => {
 
-    const {login, logout, email, ready, token} = useAuthorization()
-    const isAuth = true
+    const {login, logout, email, ready, token, userId} = useAuthorization()
+    const isAuth = !!token;
 
     return (
-        <AuthContext.Provider value={{login, logout, email, ready, token}}>
+        <AuthContext.Provider value={{login, logout, email, ready, token, userId}}>
             <div className="App">
                 <BrowserRouter>
                     {isAuth && <NavigationBar/>}

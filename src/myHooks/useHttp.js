@@ -2,45 +2,37 @@ import {useCallback, useState} from "react";
 import {toastMessage} from "../components/toastyfiMessages";
 
 export const useHttp = () => {
-
     const [errors, setErrors] = useState(null)
     const [loading, setLoading] = useState(false)
 
     const request = useCallback(async (url, method = 'GET', body = null, headers = {}) => {
+        setLoading(true)
         try {
-            setLoading(true)
             if (body) {
                 body = JSON.stringify(body)
-                console.log(body);
-                headers['Content-Type'] = 'application/json';
+                headers['Content-Type'] = 'application/json'
             }
 
             const response = await fetch(url, {method, body, headers})
             const data = await response.json()
 
             if (!response.ok) {
-                return toastMessage(data.message || 'Щось пішло не так!', 'warning')
+                toastMessage(data.message || 'Щось пішло не так на етапі перевірки інформації!', 'warning')
             }
 
             setLoading(false)
             return data
 
-
         } catch (e) {
-            return toastMessage(e.message || 'Щось пішло не так', 'error')
+            setLoading(false)
+            setErrors(e.message)
+            toastMessage(e.message || 'Error', 'error')
         }
-
     }, [])
 
-    const cleanErrors = useCallback(() => {
+    const clearErrors = useCallback(() => {
         setErrors(null)
-    }, [errors])
+    }, [])
 
-    return {
-        request,
-        errors,
-        loading,
-        cleanErrors
-    }
-
+    return {errors, loading, request, clearErrors}
 }

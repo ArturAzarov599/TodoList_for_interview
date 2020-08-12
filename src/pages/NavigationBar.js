@@ -31,7 +31,6 @@ export const NavigationBar = () => {
                                 <li><NavLink exact to="/" className="header__link">Home</NavLink></li>
                                 <li><a href='#popup' className="header__link popup__link">About</a></li>
                                 <li><NavLink exact to='contacts' className="header__link">Contacts</NavLink></li>
-                                {/*<li><NavLink exact to='register' className="header__link">Register/Enter</NavLink></li>*/}
                                 <li><NavLink exact to="exit" className="header__link">Exit</NavLink>
                                 </li>
                             </ul>

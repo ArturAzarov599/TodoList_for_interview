@@ -3,7 +3,7 @@ import {Route, Switch} from "react-router-dom";
 import {MainPage} from "../pages/MainPage";
 import {ContactsPage} from "../pages/ContactsPage";
 import {RegisterLoginPage} from "../pages/RegisterLoginPage";
-import Redirect from "react-router-dom/es/Redirect";
+import {Redirect} from "react-router-dom";
 
 export const RoutesBar = ({isAuth}) => {
 
@@ -19,9 +19,9 @@ export const RoutesBar = ({isAuth}) => {
     } else {
         return (
             <Switch>
-                <Route exact path={''}>
+                <Route exact path={'/contacts'}>
                     <RegisterLoginPage/>
-                    <Redirect to={''}/>
+                    <Redirect to={'/contacts'}/>
                 </Route>
             </Switch>
         )
