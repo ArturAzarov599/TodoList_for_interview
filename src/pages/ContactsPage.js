@@ -4,9 +4,12 @@ import {FormikControl} from "../formikValidation/FormikControl";
 import * as Yup from 'yup'
 import {useDispatch} from "react-redux";
 import {addMessageFromContactForm} from "../reducer/actions";
+import {useHttp} from "../myHooks/useHttp";
+import {toastMessage} from "../components/toastyfiMessages";
 
 export const ContactsPage = () => {
 
+    const {request} = useHttp()
     const dispatch = useDispatch();
 
     const selectOptions = [
@@ -23,11 +26,18 @@ export const ContactsPage = () => {
 
     }
 
-    const onSubmit = (value, onSubmitProps) => {
-        console.log(value);
-        onSubmitProps.setSubmitting(false)
-        onSubmitProps.resetForm()
-        dispatch(addMessageFromContactForm(value))
+    const onSubmit = async (value, onSubmitProps) => {
+        try {
+            await request('api/message/feedback', "POST", {...value})
+            console.log(value);
+            onSubmitProps.setSubmitting(false)
+            onSubmitProps.resetForm()
+            dispatch(addMessageFromContactForm(value))
+            toastMessage('Лист надіслано', 'info')
+        } catch (e) {
+            toastMessage(e.message || 'Щось пішло не так!', 'warning')
+        }
+
     }
 
     const validationSchema = Yup.object({

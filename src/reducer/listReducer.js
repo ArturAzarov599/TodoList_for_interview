@@ -2,15 +2,15 @@ import {ADD_MESSAGE_FORM_CONTACT, ADD_TASK, CHANGE__STATUS, REMOVE_TASK} from ".
 
 const initialState = {
     taskList: [],
-    contactForm: []
+    contactForm: [],
+    userMessages: []
 }
 
 export const listReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TASK:
             return {
-                ...state, taskList: state.taskList.concat(action.payload
-                )
+                ...state, taskList: state.taskList.concat(action.payload)
             }
 
         case REMOVE_TASK:
@@ -33,6 +33,7 @@ export const listReducer = (state = initialState, action) => {
                 ...state, contactForm: state.contactForm.concat(action.payload)
             }
         }
+
 
         default:
             return state
